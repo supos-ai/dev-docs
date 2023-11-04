@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage("Change Mod"){
             steps {
-                chmod -R 755 ./jenkins
+                sh "chmod -R 755 ./jenkins"
             }
         }
         stage('Build') {
