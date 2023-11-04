@@ -9,7 +9,7 @@ pipeline {
         stage('Build') {
             steps {
                 nodejs('node-v18') {
-                    npm -v
+                   sh "npm -v"
                 }
             }
         }
