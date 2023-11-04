@@ -1,11 +1,14 @@
 pipeline {
     agent any
     stages {
+        stage("Clean") {
+            cleanWs()
+        }
         stage('Build') {
             steps {
                 nodejs('node-v18') {
                     sh "npm ci"
-                    sh "npm build"
+                    sh "npm run build"
                 }
             }
         }
