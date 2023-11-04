@@ -6,6 +6,11 @@ pipeline {
                 cleanWs()
             }
         }
+        stage("Checkout Code"){
+            steps{
+                git branch: 'main', url: 'https://github.com/supos-ai/dev-docs.git'
+            }
+        }
         stage('Build') {
             steps {
                 nodejs('node-v18') {
