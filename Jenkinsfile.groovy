@@ -13,6 +13,12 @@ pipeline {
                 sshPublisher(publishers:
                     [sshPublisherDesc(
                         configName: 'tengxunyun',
+                        sshCredentials: [
+                            encryptedPassphrase: '{AQAAABAAAAAQStDVEYs57k2NaBGbow4fHi3yOtjKAxBrkH+0gI8CllY=}',
+                            key: '',
+                            keyPath: '',
+                            username: 'ubuntu'
+                        ],
                         transfers: [
                             sshTransfer(
                                 cleanRemote: false,
