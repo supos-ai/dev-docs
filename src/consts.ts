@@ -4,8 +4,8 @@
  * A few of these are not used yet, and are subject to change, example of this is Author.
  */
 export const SITE_METADATA = {
-    title: 'Astro Starter Blog',
-    headerTitle: 'Astro Starter Blog',
+    title: 'supOS 开发资源网',
+    headerTitle: '开发资源网',
     description: 'A blog created with Astro and Tailwind.css',
     language: 'en-us',
     theme: 'system', // Options: system, light, dark, Does not work yet
@@ -17,14 +17,14 @@ export const SITE_METADATA = {
 
     // The following are subject to change. They are placeholders for now.
     // This project provide a default author content see src/content/authors/default.mdx, so these details are better to be inserted there.
-    author: 'John Doe',
-    mastodon: 'https://mastodon.social/@mastodonuser',
-    email: 'address@yoursite.com',
-    github: 'https://github.com',
-    twitter: 'https://twitter.com/Twitter',
-    facebook: 'https://facebook.com',
-    youtube: 'https://youtube.com',
-    linkedin: 'https://www.linkedin.com',
+    author: 'SunZhiqi',
+    // mastodon: 'https://mastodon.social/@mastodonuser',
+    email: 'sunzhiqi@live.com',
+    github: 'https://github.com/noopn',
+    // twitter: 'https://twitter.com/Twitter',
+    // facebook: 'https://facebook.com',
+    // youtube: 'https://youtube.com',
+    // linkedin: 'https://www.linkedin.com',
 
     // These are not supported yet
     // analytics: {
@@ -104,8 +104,8 @@ export const ITEMS_PER_PAGE = 5;
 
 export const NAVIGATION = [
     {href: '/', title: 'Home'},
-    {href: '/blog', title: 'Blog'},
-    {href: '/tags', title: 'Tags'},
-    {href: '/projects', title: 'Projects'},
-    {href: '/about', title: 'About'},
+    {href: '/blog', title: '文章'},
+    {href: '/tags', title: '标签'},
+    {href: '/projects', title: '项目'},
+    {href: '/about', title: '关于'},
 ]

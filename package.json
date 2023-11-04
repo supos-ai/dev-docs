@@ -6,6 +6,9 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "deploy": "yarn build && yarn deploy:delete && yarn deploy:upload",
+    "deploy:delete": "tcb hosting delete -d / -e cloud-7gvhw2xc603ab9e0",
+    "deploy:upload": "tcb hosting deploy dist / -e cloud-7gvhw2xc603ab9e0",
     "preview": "astro preview",
     "astro": "astro"
   },
