@@ -1,9 +1,9 @@
 pipeline {
     agent any
     stages {
-        stage('Pull code') {
+        stage('Build') {
             steps {
-              echo "echo"
+              sh "./jenkins/build.sh"
             }
         }
         
