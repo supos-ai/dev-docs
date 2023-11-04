@@ -8,7 +8,9 @@ pipeline {
         }
         stage('Build') {
             steps {
-              sh "./jenkins/build.sh"
+                nodejs('node-v18') {
+                    npm -v
+                }
             }
         }
         
