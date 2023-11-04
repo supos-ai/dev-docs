@@ -34,7 +34,7 @@ pipeline {
                             sshTransfer(
                                 cleanRemote: false,
                                 excludes: '',
-                                execCommand: 'cd /home/ubuntu/test',
+                                execCommand: 'rm -rf /home/ubuntu/test',
                                 execTimeout: 120000,
                                 flatten: false,
                                 makeEmptyDirs: false,
