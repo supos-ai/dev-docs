@@ -38,15 +38,15 @@ pipeline {
                         ],
                         transfers: [
                             sshTransfer(
-                                cleanRemote: false,
+                                cleanRemote: true,
                                 excludes: '',
-                                execCommand: '',
+                                execCommand: 'sudo su & rm -rf /www/supos-docs & mv /home/ubuntu/supos-docs /www/supos-docs',
                                 execTimeout: 120000,
                                 flatten: false,
                                 makeEmptyDirs: true,
                                 noDefaultExcludes: false,
                                 patternSeparator: '[, ]+',
-                                remoteDirectory: '/www/supos-docs',
+                                remoteDirectory: '/supos-docs',
                                 remoteDirectorySDF: false,
                                 removePrefix: 'dist',
                                 sourceFiles: 'dist/**'
