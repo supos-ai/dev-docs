@@ -40,7 +40,7 @@ pipeline {
                             sshTransfer(
                                 cleanRemote: false,
                                 excludes: '',
-                                execCommand: 'cd /www/supos-docs',
+                                execCommand: '',
                                 execTimeout: 120000,
                                 flatten: false,
                                 makeEmptyDirs: true,
