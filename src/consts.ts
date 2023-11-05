@@ -103,7 +103,7 @@ export const SITE_METADATA = {
 export const ITEMS_PER_PAGE = 5;
 
 export const NAVIGATION = [
-    {href: '/', title: 'Home'},
+    {href: '/', title: '主页'},
     {href: '/blog', title: '文章'},
     {href: '/tags', title: '标签'},
     {href: '/projects', title: '项目'},
