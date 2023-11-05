@@ -38,9 +38,9 @@ pipeline {
                         ],
                         transfers: [
                             sshTransfer(
-                                cleanRemote: true,
+                                cleanRemote: false,
                                 excludes: '',
-                                execCommand: 'sudu su & mv /home/ubuntu/supos-docs /www',
+                                // execCommand: 'sudu su & mv /home/ubuntu/supos-docs /www',
                                 execTimeout: 120000,
                                 flatten: false,
                                 makeEmptyDirs: false,
