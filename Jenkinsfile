@@ -40,13 +40,13 @@ pipeline {
                             sshTransfer(
                                 cleanRemote: true,
                                 excludes: '',
-                                execCommand: 'cd /home/ubuntu/test',
+                                execCommand: 'cd /www/supos-docs',
                                 execTimeout: 120000,
                                 flatten: false,
                                 makeEmptyDirs: false,
                                 noDefaultExcludes: false,
                                 patternSeparator: '[, ]+',
-                                remoteDirectory: '/home/ubuntu/test',
+                                remoteDirectory: '/www/supos-docs',
                                 remoteDirectorySDF: false,
                                 removePrefix: 'dist',
                                 sourceFiles: 'dist/**'
