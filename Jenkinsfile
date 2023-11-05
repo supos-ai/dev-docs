@@ -43,7 +43,7 @@ pipeline {
                                 execCommand: 'cd /www/supos-docs',
                                 execTimeout: 120000,
                                 flatten: false,
-                                makeEmptyDirs: false,
+                                makeEmptyDirs: true,
                                 noDefaultExcludes: false,
                                 patternSeparator: '[, ]+',
                                 remoteDirectory: '/www/supos-docs',
