@@ -6,7 +6,7 @@
 export const SITE_METADATA = {
     title: 'supOS 开发资源网',
     headerTitle: '开发资源网',
-    description: 'A blog created with Astro and Tailwind.css',
+    description: '浏览 supOS 相关开发技巧与经验',
     language: 'en-us',
     theme: 'system', // Options: system, light, dark, Does not work yet
     siteUrl: 'https://astro-starter-blog.yon.fun/',
