@@ -40,7 +40,7 @@ pipeline {
                             sshTransfer(
                                 cleanRemote: true,
                                 excludes: '',
-                                execCommand: 'rm -rf /www/supos-docs & mv /home/ubuntu/supos-docs /www',
+                                execCommand: 'rm -rf /www/supos-docs && mv /home/ubuntu/supos-docs /www',
                                 execTimeout: 120000,
                                 flatten: false,
                                 makeEmptyDirs: true,
