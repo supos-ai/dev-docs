@@ -1,3 +1,5 @@
+properties([pipelineTriggers([githubPush()])])
+
 pipeline {
     agent any
     stages {
@@ -8,7 +10,11 @@ pipeline {
         }
         stage("Checkout Code"){
             steps{
-                git branch: 'main', url: 'https://github.com/supos-ai/dev-docs.git'
+                checkout scmGit(
+                    branches: [[name: "*/main"]],
+                    extensions: [],
+                    userRemoteConfigs:[[url: "https://github.com/supos-ai/dev-docs.git"]]
+                )
             }
         }
         stage('Build') {
