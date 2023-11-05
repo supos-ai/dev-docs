@@ -11,7 +11,7 @@ pipeline {
         stage("Checkout Code"){
             steps{
                 checkout scmGit(
-                    branches: [[name: "*/main"]],
+                    branches: [[name: "main"]],
                     extensions: [],
                     userRemoteConfigs:[[url: "https://github.com/supos-ai/dev-docs.git"]]
                 )
