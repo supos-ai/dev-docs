@@ -13,13 +13,15 @@ interface Props {
     page: Page;
 }
 
+// export async function getStaticPaths({paginate}) {
+//     const posts = await getCollection('blog', excludeDrafts).then(sortBlogPosts)
+//     return paginate(posts, {pageSize: ITEMS_PER_PAGE});
+// }
 export async function getStaticPaths({paginate}) {
     const posts = await getCollection('blog', excludeDrafts).then(sortBlogPosts)
     return paginate(posts, {pageSize: ITEMS_PER_PAGE});
 }
-
 const {page} = Astro.props;
-console.log(page);
 ---
 
 <RootLayout title="Projects">
