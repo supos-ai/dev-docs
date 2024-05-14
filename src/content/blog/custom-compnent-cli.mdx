@@ -64,6 +64,11 @@ npx supos-ccws-cli create [项目文件夹名称]
 npm run pull
 yarn pull
 
+// 拉取项目,并同时安装依赖 需要配置 ccws.config.json
+// 在使用 build 打包的时候, 会自动分析依赖并生成依赖文件
+npm run pull:deps
+yarn pull:deps
+
 // 开启本地开发服务器
 npm run dev
 yarn dev
