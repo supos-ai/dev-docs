@@ -15,7 +15,6 @@ summary: 说明了可编程组件脚手架工具的使用方法，轻松以开�
 | ----- | ----- |
 | supOS | v3.0+ |
 
-
 #### 说明
 
 本工具为可编程组件的辅助开发工具
@@ -24,10 +23,6 @@ summary: 说明了可编程组件脚手架工具的使用方法，轻松以开�
 - 支持 多文件打包 静态资源打包
 - 一键同步， 一键上传
 - 支持 React 组件
-
-{/* <video  width="720" height="480" src="http://nextcloud.iftrue.club:37186/index.php/s/xJJ9C6oFJX6BDc6/download/2021-11-11%E5%8F%AF%E7%BC%96%E7%A8%8B%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%88%86%E4%BA%AB.mp4" controls >
-  <source src="http://nextcloud.iftrue.club:37186/index.php/s/xJJ9C6oFJX6BDc6/download/2021-11-11%E5%8F%AF%E7%BC%96%E7%A8%8B%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%88%86%E4%BA%AB.mp4" type="video/mp4">
-</video> */}
 
 #### 安装
 
@@ -52,9 +47,9 @@ npx supos-ccws-cli create [项目文件夹名称]
 │       │   │   └── index.js                // 组件编译后入口文件，不需要人为修改
 │       │   ├── dependencies.json           // supos平台默认依赖文件，不需要人为修改
 │       │   └── source                      // 源文件目录
-│       │       ├── index.js                // 入口文件，必须导出react组件，名称必须为index.[ext]
+│       │       ├── index.js                // 入口文件，必须导出react组件，名称必须为 index.tsx 或 index.jsx，tsx 文件会优先查找
 │       │       ├── style.module.scss       // 模块化样式文件
-│       │       └── style.scss              // 全局样式文件
+│       │       └── style.scss              // 非模块化样式文件
 │       └── component2
 │           ├── dependencies.json
 │           └── source
@@ -66,13 +61,20 @@ npx supos-ccws-cli create [项目文件夹名称]
 
 ```
 // 拉取项目 需要配置 ccws.config.json
-npm run sup:pull
+npm run pull
+yarn pull
 
 // 开启本地开发服务器
-npm run sup:dev
+npm run dev
+yarn dev
 
-// 推送项目到supos平台
-npm run sup:push
+// 打包组件不推送至平台
+npm run build
+yarn build
+
+// 打包组件并推送supos平台
+npm run push
+yarn push
 ```
 
 #### 配置文件
@@ -80,18 +82,18 @@ npm run sup:push
 > ccws.config.json
 
 - 必须传入一个数组
-- project：项目名称 用于选择项目
-- origin：项目地址 协议:域名/ip:端口 例如： http://xxx.xxx.xxx:8080 **最后面不要有 /**
+- project: 项目名称 用于选择项目
+- origi: 项目地址 协议:域名/ip:端口 例如： http://xxx.xxx.xxx:8080 <br></br>
+  **注意:** origin 是唯一校验标识，不要重复
+- username: 用户名称
+- password: 密码
+  **注意:** 开启加密登陆后,密码会被混淆,需要在浏览器的开发者工具,newwork 中查看 login 接口，使用加密后的密码
 
 #### 拉取项目
 
 - 选择项目
 
 ![](./custom-compnent-cli/0002.png)
-
-- 输入账号密码  
-
-![](./custom-compnent-cli/0003.png)
 
 - 建立链接选择需要同步的 app,可以多选
 
@@ -144,13 +146,9 @@ import bg from './bg.png'
   "lodash": "^4.17.21",
   "antd": "^4.16.13",
   "moment": "^2.29.1",
-  "vue": "^2.6.14",
-  "vuera": "^0.2.7",
   "scriptUtil": "*"
 }
 ```
-
-`vuera` 用于处理 vue 组件
 
 **以上第三方包不需要手动在开发环境中安装，如果安装了会报与环境依赖冲突的错误**
 
