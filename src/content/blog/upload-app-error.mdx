@@ -1,0 +1,50 @@
+---
+title: 导入App时提示重复
+date: "2021-05-19"
+tags: ["development"]
+# related:
+#     - github-markdown-guide
+#     - guide-to-using-images-in-nextjs
+draft: false
+summary: 导入App时提示重复,一般在数据库中删除脏数据即可解决
+---
+
+**适用版本**
+
+| 平台  | 版本  |
+| ----- | ----- |
+| supOS | v3.0+ |
+
+① 查找 mariadb 所在的容器
+
+```bash
+kubectl get po|grep maria
+```
+
+② 进入容器
+
+mariadb 的容器为 **lake-mariadb-default-\*\***
+
+```bash
+kubectl exec -it lake-mariadb-default-698b957d96-dn2xq bash
+```
+
+③ 链接数据库
+
+{/* [^_^] mariadbSupos */}
+
+密码联系管理员获取
+
+```bash
+mysql -h localhost -u root -p
+```
+
+④ 执行 sql 删除脏数据
+
+```sql
+DELETE FROM supos_system001.supngin_oodm_network_node
+WHERE instance_name NOT IN (
+  SELECT en_name
+  FROM supos_dt.supngin_oodm_entity
+)
+```

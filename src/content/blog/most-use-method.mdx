@@ -1,0 +1,114 @@
+---
+title: 常用脚本或工具方法
+date: "2023-07-18"
+tags: ["development"]
+# related:
+#     - github-markdown-guide
+#     - guide-to-using-images-in-nextjs
+draft: false
+summary: 服务或脚本中常用的工具方法。
+---
+
+{/* [^_^]: ①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳❶❷❸❹❺❻❼❽❾❿⓫⓬⓭⓮⓯⓰⓱⓲⓳⓴ */}
+
+**适用版本**
+
+| 平台  | 版本  |
+| ----- | ----- |
+| supOS | v3.0+ |
+
+## 统一数据请求<a style="" name="unified_data_fetch"></a>
+
+业务设计器组态开发时, 经常涉及到多个控件是用同一组数据,**当页面请求数过大的时候**, 建议在页面初始化事件中，统一请求，并通过组件的加载完成事件绑定数据。
+
+另一种场景是，**数据需要预处理或与图片等资源路径绑定**, 可以在初始化事件中尽早加载数据, 并通过脚本实现逻辑。
+
+```js
+// 页面初始化
+
+function requestFac(type, customRequest) {
+  console.log(type, customRequest);
+  switch (type) {
+    case "util":
+      return (args) =>
+        new Promise((resolve) =>
+          scriptUtil.executeScriptService(
+            Object.assign({}, { version: "V2" }, args, {
+              cb: (res) => {
+                if (args.cb && typeof args.cb === "function") args.cb(res);
+                resolve(res);
+              },
+            })
+          )
+        );
+    case "fetch":
+      return window.fetch;
+    case "custom":
+      return typeof customRequest === "function"
+        ? customRequest
+        : new Error("customRequest is not a function");
+    default:
+      return fetch;
+  }
+}
+
+// util key options
+// fetch key url options
+// custom ()=>any key options[]
+function preFetch() {
+  var hasType = ["util", "fetch", "custom"].indexOf(arguments[0]) > -1;
+  var args = [].slice.call(arguments);
+  var request = requestFac.apply(
+    null,
+    [hasType ? args[0] : "util"].concat(hasType ? args.slice(2) : args.slice(1))
+  );
+  var params = !hasType
+    ? args.slice(1)
+    : args[0] === "custom"
+    ? args.slice(3)
+    : args.slice(2);
+
+  var key = !hasType
+    ? args[0]
+    : args[0] === "custom"
+    ? arguments[2]
+    : arguments[1];
+  var fetchCache;
+  if (!(fetchCache = window._supOS_comp_data_fetch_))
+    fetchCache = window._supOS_comp_data_fetch_ = {};
+
+  return (fetchCache[key] = request.apply(null, params));
+}
+
+!window.getFetchCache &&
+  (window.getFetchCache = function (key) {
+    var fetchCache;
+    if (!(fetchCache = window._supOS_comp_data_fetch_))
+      fetchCache = window._supOS_comp_data_fetch_ = {};
+    return fetchCache[key];
+  });
+
+
+```
+
+调用方式
+
+```js
+// 页面加载事件
+
+preFetch("test_002", {
+  objName: "os_businesscockpit.test", // 模板 或者 实例
+  serviceName: "supos_desktop.test_002", // 服务
+});
+```
+
+
+获取数据
+
+```js
+// 控件内容加载事件
+
+getFetchCache('test_002').then(res=>{
+
+})
+```
