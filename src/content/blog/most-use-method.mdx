@@ -87,8 +87,6 @@ function preFetch() {
       fetchCache = window._supOS_comp_data_fetch_ = {};
     return fetchCache[key];
   });
-
-
 ```
 
 调用方式
@@ -102,13 +100,32 @@ preFetch("test_002", {
 });
 ```
 
-
 获取数据
 
 ```js
 // 控件内容加载事件
 
-getFetchCache('test_002').then(res=>{
-
-})
+getFetchCache("test_002").then((res) => {});
 ```
+
+## 清除桌面 2.0+组件背景颜色
+
+配合设置组件设计器背景,可以实现组件透明色。
+
+```js
+// 页面初始化
+
+const style = document.createElement("style");
+style.innerHTML = `
+    body {background: transparent !important;}
+    .ant-layout {background: transparent !important;}
+`;
+
+document.head.appendChild(style);
+
+const topStyle = document.createElement("style");
+topStyle.innerHTML = `.dragSource div[class ^='webview']{background: transparent !important}`;
+window.top.document.head.appendChild(topStyle);
+```
+
+## [添加额外字体并设置字体渐变色](/blog/custom-font-style)
