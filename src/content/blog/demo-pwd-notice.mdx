@@ -1,0 +1,71 @@
+---
+title: (案例) 密码过期前提醒
+date: "2024-01-10"
+tags: ["development"]
+# related:
+#     - github-markdown-guide
+#     - guide-to-using-images-in-nextjs
+draft: false
+summary: 通过服务实现检查密码是否即将过期，在前端调用实现密码过期前提醒。
+---
+
+{/* [^_^]: ①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳❶❷❸❹❺❻❼❽❾❿⓫⓬⓭⓮⓯⓰⓱⓲⓳⓴ */}
+
+**适用版本**
+
+| 平台  | 版本  |
+| ----- | ----- |
+| supOS | v3.0+ |
+
+**需要将平台数据库配置到外部数据源中，方便再服务中链接。**
+
+```js
+// 服务或订阅
+// username       查询执行用户名 必填
+// reminderTime   到期前多长时间开始提醒  默认 72小时 非必填
+
+// 客户端为IE11浏览器时不支持ES6脚本
+
+var header = {
+  "X-Tenant-Id": "dt",
+};
+var result = {
+  remainderTime: 0,
+  expire: false,
+};
+var httpService = services["HttpClientService"];
+
+var config = httpService.getString(
+  "http://10.138.45.38:8080/inter-api/auth/v1/password/config",
+  30000
+);
+
+config = JSON.parse(config).body.data;
+
+if (!reminderTime) {
+  reminderTime = 72;
+}
+reminderTime = reminderTime * 60 * 60 * 1000;
+
+if (config.expirable) {
+  var url = "http://compose-manage:8080/api/compose/manage/datatable/exec";
+  var param = {
+    id: "da184faf83",
+    sql: "select * from auth_user where USER_NAME = '" + username + "'",
+  };
+
+  var authUser = httpService.post(url, JSON.stringify(param), header, 30000);
+
+  authUser = JSON.parse(authUser).body.data.dataSource[0];
+
+  if (authUser && authUser.MODIFY_PASS_TIME) {
+    var expireTime = config.expireTime * 24 * 60 * 60 * 1000;
+    var currentReminderTime =
+      expireTime - (Date.now() - authUser.MODIFY_PASS_TIME);
+    result.expire = currentReminderTime <= reminderTime;
+    result.remainderTime = (currentReminderTime / 1000 / 60 / 60) >> 0;
+  }
+}
+
+result;
+```
