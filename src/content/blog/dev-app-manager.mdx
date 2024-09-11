@@ -1,0 +1,151 @@
+---
+title: app管理部署前端项目
+date: "2024-09-09"
+tags: ["development"]
+draft: false
+summary: 如何在APP管理部署静态页面,或前后端分离的前端项目。
+---
+
+**适用版本**
+
+| 平台  | 版本  |
+| ----- | ----- |
+| supOS | v3.0+ |
+
+#### 模板下载
+
+下载 <a download='app.zip' href="/static/configs/app.zip">App 配置模板</a>
+
+静态页面或前端项目需要放到 bin/src/static, 如果需要自定义目录，查看下面详细字段说明。
+
+
+#### 目录结构
+
+```bash
+.
+├── app.yaml                  # app配置信息
+├── bin                       # 项目文件存放位置 如果改动文件夹需要同时改动 build.yaml 中 dockerPath路径
+│   └── src
+│       ├── Dockerfile        # docker 配置
+│       ├── localtime
+│       ├── nginx.conf
+│       └── static            # 前端项目或静态资源
+│           └── index.html
+├── build.yaml                # 镜像打包配置
+├── compose.yaml              # 容器配置
+├── config.ini
+├── data                      # 目录配置
+│   └── resource.yaml
+├── dependencies.yaml
+├── requirement.yaml
+├── secret.yaml
+└── vendor.yaml
+```
+
+以下的文件可以随项目修改。
+
+#### app.yaml
+
+```yaml
+apiVersion: v3alpha1               # 不需要修改
+vendorName: plantform              # 开发者名称     字段会显示在app管理列表中
+name: bangpu                       # app别名       字段会显示在app管理列表中
+appVersion: v1.0.0                 # app版本       字段会显示在app管理列表中
+description: 邦普3D                # app 描述
+showName: 邦普3D                   # app显示名称    字段会显示在app管理列表中
+type: normal                      #  不需要修改
+```
+
+**注意：`vendorName` `bangpu` 两个字段用于拼接 url 访问路径**
+
+#### data/resource.yaml
+
+```yaml
+- code: bangpu                   # 菜单编码  显示为supos系统菜单编码
+  parentCode:                    # 多级菜单可填写
+  name: 邦普首页                  # 页面名称
+  type: 0                        # 不需要修改，部署后可在系统菜单配置
+  openType: 0                    # 不需要修改，部署后可在系统菜单配置
+  url: /apps/plantform-bangpu/   # url路径，需要严格遵循以下规则，否则无法正确代理
+                                 # /apps/ + [app.yaml中vendorName字段值]-[app.yaml中name字段值] + [compose.yaml中service/proxy/paths/path字段值]
+  sort: 10002                    # 排序字段
+  desc: 邦普首页                  # 菜单描述
+```
+
+#### build.yaml
+
+```yaml
+apiVersion: v3alpha1                         # 不需要修改
+images:
+  - name: resource-container                 # 镜像名 如果修改需要同步修改 compose.yaml 中 service/containers/name 和 service/containers/image 
+    tag: 1.0.0                               # 版本   如果修改需要同步修改 compose.yaml 中 service/containers/image 
+    dockerPath: bin/src                      # 部署资源的路径
+```
+
+#### vendor.yaml
+
+```yaml
+apiVersion: v3alpha3
+vendor:                                      # 根据情况自行修改
+  showName: bluetron
+  bluetronId: bluetron
+  organization: bluetron
+  url: bluetron
+  email: bluetron@supos.com
+  copyright:
+  address: 浙江杭州
+```
+
+
+#### compose.yaml
+
+```yaml
+apiVersion: v3alpha1
+service:
+  replicas: 1                              # 容器实例个数
+  proxy:                                
+    paths:
+      - path: /                            # 服务将代理根路径 / 的流量
+        servicePort: 80                    # 流量被发送到pod的 80端口
+  containers:
+    - name: resource-container             # 容器名称      需要和 build.yaml 配置保持一致
+      image: resource-container:1.0.0      # 镜像名称      需要和 build.yaml 配置保持一致
+      ports:
+        - containerPort: 80                # 容器内服务端口
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+
+```
+
+
+- 外部请求到达 Kubernetes 服务的 80 端口（port: 80）。
+- Kubernetes 服务将请求转发到 Pod 的 targetPort（也是 80）。
+- 在 Pod 内，流量到达容器的 containerPort: 80，此时 Nginx 监听并处理这个请求。
+
+
+#### nginx 配置
+
+```bash
+server {
+  listen       80;             # 端口需要和 compose.yaml
+  server_name  localhost;
+
+  root   /usr/share/nginx/html;
+  index  index.html index.htm;
+
+  location / {
+      # 解决单页应用服务端路由的问题
+      # html 页面不要添加缓存
+      try_files  $uri $uri/ /index.html;  
+  }
+
+  location /static {
+      # 带 hash 的资源，需要配置长期缓存
+      expires 1y;
+  }
+}
+```
+
